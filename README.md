@@ -9,7 +9,7 @@ The [Guide to CSS support in email](http://www.campaignmonitor.com/css/) from
 [campaignmonitor.com](http://www.campaignmonitor.com) shows that Gmail doesn't
 support `<style>` tags.
 
-Thus, CSS is really only cross-plaform when it is inlined for each element.
+Thus, CSS is really only cross-platform when it is inlined for each element.
 
 
 ### [Email Client Popularity](http://www.campaignmonitor.com/stats/email-clients/):
