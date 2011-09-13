@@ -1,6 +1,4 @@
 require 'abstract_unit'
-require 'mocha'
-require 'action_mailer/inline_css_helper'
 
 class HelperMailer < ActionMailer::Base
   helper ActionMailer::InlineCssHelper
@@ -16,15 +14,6 @@ class HelperMailer < ActionMailer::Base
   def mail_with_defaults(&block)
     mail(:to => "test@localhost", :from => "tester@example.com",
           :subject => "using helpers", &block)
-  end
-end
-
-# Simple Rails mock for paths
-class Rails
-  class << self
-    def root; self; end
-    def join(*args); self; end
-    def to_s; "path"; end
   end
 end
 

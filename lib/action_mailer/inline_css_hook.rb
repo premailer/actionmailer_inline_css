@@ -5,7 +5,7 @@ module ActionMailer
   class InlineCssHook
     def self.delivering_email(message)
       if html_part = (message.html_part || (message.content_type =~ /text\/html/ && message))
-        premailer = Premailer.new(html_part.body.to_s, :with_html_string => true)
+        premailer = ::Premailer.new(html_part.body.to_s, :with_html_string => true)
         existing_text_part = message.text_part && message.text_part.body.to_s
         # Reset the body
         message.body = nil

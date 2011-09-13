@@ -29,8 +29,11 @@ lib = File.expand_path("#{File.dirname(__FILE__)}/../lib")
 $:.unshift(lib) unless $:.include?('lib') || $:.include?(lib)
 
 require 'test/unit'
+require 'mocha'
+
 require 'action_mailer'
 require 'action_mailer/test_case'
+require 'actionmailer_inline_css'
 
 silence_warnings do
   # These external dependencies have warnings :/
@@ -68,6 +71,15 @@ end
 class Net::SMTP
   def self.new(*args)
     MockSMTP.new
+  end
+end
+
+# Simple Rails mock for paths
+class Rails
+  class << self
+    def root; self; end
+    def join(*args); self; end
+    def to_s; "path"; end
   end
 end
 
