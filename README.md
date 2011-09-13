@@ -51,9 +51,9 @@ these CSS URIs.
 
 Add the following line to the `<head>` section of <tt>app/views/layouts/build_mailer.html.erb</tt>:
 
-    <%= stylesheet_link_tag 'mailers/build_mailer' %>
+    <%= stylesheet_link_tag '/stylesheets/mailers/build_mailer' %>
 
-This will add a stylesheet link for <tt>/stylesheets/mailers/build_mailer.css</tt>.
+This will add a stylesheet link for <tt>public/stylesheets/mailers/build_mailer.css</tt>.
 Premailer will then inline the CSS from that file, and remove the link tag.
 
 
