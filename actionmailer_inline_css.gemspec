@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name     = "actionmailer_inline_css"
-  s.version  = "1.0.3"
+  s.version  = "1.1.0"
   s.date = Time.now.strftime('%Y-%m-%d')
   s.summary  = "Always send HTML e-mails with inline CSS, using the 'premailer' gem"
   s.email    = "nathan.f77@gmail.com"
