@@ -65,7 +65,7 @@ but the following helper is now available for your mail layouts:
 * File can be given with or without .css extension
 * Default path for mailer css files is <tt>public/stylesheets/mailers/#{mailer_name}.css</tt>
 
-#### Example
+#### Examples
 
 Given a mailer called <tt>BuildMailer</tt>, you can add the following
 line to the `<head>` section of <tt>app/views/layouts/build_mailer.html.erb</tt>:
@@ -76,16 +76,14 @@ This will embed the CSS found at <tt>public/stylesheets/mailers/build_mailer.css
 
 --------------------------
 
-If you wanted to include different CSS for each mail template, you could do something like this:
+If you use Sass on Heroku with [hassle](https://github.com/Papipo/hassle):
 
-    <% content_for 'head' do %>
-      <%= embedded_style_tag 'error_notification' %>
-    <% end %>
+    <%= embedded_style_tag 'tmp/hassle/stylesheets/mailers/build_mailer.css' %>
 
 
 ## Other Notes
 
-It may seem like a waste of resources to generate HTML, then parse it with Nokogiri,
+It might seem like a waste of resources to generate HTML, then parse it with Nokogiri,
 alter it, and finally re-render it. However, there is simply no other way to do it.
 ERB templates contain HTML tags in plain text, so the output must be parsed.
 On-the-fly CSS inlining could theoretically be built for Haml templates,
