@@ -6,18 +6,17 @@ require 'rake/testtask'
 require 'rake/packagetask'
 require 'rubygems/package_task'
 
-spec = eval(File.read('actionmailer_inline_css.gemspec'))
-
-Gem::PackageTask.new(spec) do |p|
-  p.gem_spec = spec
+def gemspec
+ @gemspec ||= begin
+   file = File.expand_path('../actionmailer_inline_css.gemspec', __FILE__)
+   eval(File.read(file), binding, file)
+ end
 end
 
-desc "Release to gemcutter"
-task :release => :package do
-  require 'rake/gemcutter'
-  Rake::Gemcutter::Tasks.new(spec).define
-  Rake::Task['gem:push'].invoke
+Gem::PackageTask.new(gemspec) do |pkg|
+  pkg.need_tar = true
 end
+
 
 desc "Default Task"
 task :default => [ :test ]
