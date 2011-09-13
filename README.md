@@ -54,29 +54,18 @@ To use this in your Rails app, simply add `gem "actionmailer_inline_css"` to you
   (Having said that, it is recommended that you write your text templates by hand.)
 
 
-### Additional Helpers
+### Including CSS in Mail Templates
 
-Rails does not provide any helpers for adding 'embedded' CSS to your layouts (and rightly so!),
-but the following helper is now available for your mail layouts:
+You can use the `stylesheet_link_tag` helper to add stylesheets to your mailer layouts.
+<tt>actionmailer_inline_css</tt> contains a <tt>premailer</tt> override that properly handles
+these CSS URIs.
 
-<tt>embedded_style_tag(file = mailer.mailer_name)</tt>
+#### Example
 
-* Embeds CSS loaded from a file, in a <tt>style</tt> tag.
-* File can be given with or without .css extension
-* Default path for mailer css files is <tt>public/stylesheets/mailers/#{mailer_name}.css</tt>
+Add the following line to the `<head>` section of <tt>app/views/layouts/build_mailer.html.erb</tt>:
 
-#### Examples
+    <%= stylesheet_link_tag 'mailers/build_mailer' %>
 
-Given a mailer called <tt>BuildMailer</tt>, you can add the following
-line to the `<head>` section of <tt>app/views/layouts/build_mailer.html.erb</tt>:
-
-    <%= embedded_style_tag %>
-
-This will embed the CSS found at <tt>public/stylesheets/mailers/build_mailer.css</tt>.
-
---------------------------
-
-If you use Sass on Heroku with [hassle](https://github.com/Papipo/hassle):
-
-    <%= embedded_style_tag 'tmp/hassle/stylesheets/mailers/build_mailer.css' %>
+This will add a stylesheet link for <tt>/stylesheets/mailers/build_mailer.css</tt>.
+Premailer will then inline the CSS from that file, and remove the link tag.
 

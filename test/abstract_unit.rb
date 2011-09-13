@@ -83,7 +83,7 @@ class Rails
   class << self
     def root; self; end
     def join(*args); self; end
-    def to_s; "path"; end
+    def to_s; "PATH"; end
   end
 end
 

@@ -13,8 +13,6 @@ TEST_HTML = %Q{
 </html>}
 
 class HelperMailer < ActionMailer::Base
-  helper ActionMailer::InlineCssHelper
-
   def use_inline_css_hook_with_only_html_part
     mail_with_defaults do |format|
       format.html { render(:inline => TEST_HTML) }
