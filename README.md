@@ -5,24 +5,11 @@ Seamlessly integrate [Alex Dunae's premailer](http://premailer.dialect.ca/) gem 
 
 ## Problem?
 
-The [Guide to CSS support in email](http://www.campaignmonitor.com/css/) from
-[campaignmonitor.com](http://www.campaignmonitor.com) shows that Gmail doesn't
-support `<style>` tags.
+Gmail doesn't support `<style>` or `<link>` tags for HTML emails. Other webmail clients also
+have problems with `<link>` tags.
 
-Thus, the only correct way to send HTML emails is when CSS is inlined on each element.
-
-
-### [Email Client Popularity](http://www.campaignmonitor.com/stats/email-clients/):
-
-| Outlook | 27.62% |
-|------:|:------------|
-| iOS Devices | 16.01% |
-| Hotmail | 12.14% |
-| Apple Mail | 11.13% |
-| Yahoo! Mail | 9.54% |
-| Gmail | 7.02% |
-
-Gmail may only make up 7% of all email clients, but it's a percentage you can't ignore!
+This means that CSS must be inlined on each element, otherwise
+the email will not be displayed correctly in every client.
 
 
 ## Solution
@@ -33,12 +20,12 @@ Inlining CSS is a pain to do by hand, and that's where the
 From http://premailer.dialect.ca/:
 
 * CSS styles are converted to inline style attributes.
-  Checks style and link[rel=stylesheet] tags and preserves existing inline attributes.
+  Checks <tt>style</tt> and <tt>link[rel=stylesheet]</tt> tags, and preserves existing inline attributes.
 * Relative paths are converted to absolute paths.
-  Checks links in href, src and CSS url('')
+  Checks links in <tt>href</tt>, <tt>src</tt> and CSS <tt>url('')</tt>
 
 
-The <tt>actionmailer_inline_css</tt> gem is a tiny integration between ActionMailer and premailer.
+This <tt>actionmailer_inline_css</tt> gem is a tiny integration between ActionMailer and premailer.
 
 Inspiration comes from [@fphilipe](https://github.com/fphilipe)'s
 [premailer-rails3](https://github.com/fphilipe/premailer-rails3) gem, but I wasn't
@@ -68,4 +55,21 @@ Add the following line to the `<head>` section of <tt>app/views/layouts/build_ma
 
 This will add a stylesheet link for <tt>/stylesheets/mailers/build_mailer.css</tt>.
 Premailer will then inline the CSS from that file, and remove the link tag.
+
+
+## More Info
+
+See this [Guide to CSS support in email](http://www.campaignmonitor.com/css/) from
+[campaignmonitor.com](http://www.campaignmonitor.com) for more info about CSS in emails.
+
+
+### [Email Client Popularity](http://www.campaignmonitor.com/stats/email-clients/):
+
+| Outlook | 27.62% |
+|------:|:------------|
+| iOS Devices | 16.01% |
+| Hotmail | 12.14% |
+| Apple Mail | 11.13% |
+| Yahoo! Mail | 9.54% |
+| Gmail | 7.02% |
 
