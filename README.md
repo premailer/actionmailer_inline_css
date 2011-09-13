@@ -80,12 +80,3 @@ If you use Sass on Heroku with [hassle](https://github.com/Papipo/hassle):
 
     <%= embedded_style_tag 'tmp/hassle/stylesheets/mailers/build_mailer.css' %>
 
-
-## Other Notes
-
-It might seem like a waste of resources to generate HTML, then parse it with Nokogiri,
-alter it, and finally re-render it. However, there is simply no other way to do it.
-ERB templates contain HTML tags in plain text, so the output must be parsed.
-On-the-fly CSS inlining could theoretically be built for Haml templates,
-but it would be far too much effort for such a small use-case.
-
