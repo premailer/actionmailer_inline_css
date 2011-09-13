@@ -1,3 +1,7 @@
+#
+# Copied from rails/actionmailer/test/abstract_unit.rb
+# --------------------------------------------------------------
+
 # Pathname has a warning, so require it first while silencing
 # warnings to shut it up.
 #
