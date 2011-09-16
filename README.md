@@ -40,6 +40,11 @@ To use this in your Rails app, simply add `gem "actionmailer_inline_css"` to you
 * If you don't include a text email template, <tt>premailer</tt> will generate one from the HTML part.
   (Having said that, it is recommended that you write your text templates by hand.)
 
+#### NOTE:
+
+The current version of premailer doesn't support UTF-8, so I have written a small
+workaround to enforce it. This works for both Ruby 1.9 and 1.8.
+
 
 ### Including CSS in Mail Templates
 
