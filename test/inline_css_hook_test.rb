@@ -58,22 +58,31 @@ end
 class InlineCssHookTest < ActionMailer::TestCase
   def test_inline_css_hook_with_only_html_part
     mail = HelperMailer.use_inline_css_hook_with_only_html_part.deliver
-    assert_match '<div id="test" style="color: #123456;">Test</div>', mail.html_part.body.encoded
+    assert_match '<div id="test" style="color: #123456;">Test</div>', mail.html_part.decoded
     # Test generated text part
-    assert_match 'Test', mail.text_part.body.encoded
+    assert_match 'Test', mail.text_part.decoded
   end
 
   def test_inline_css_hook_with_text_and_html_parts
     mail = HelperMailer.use_inline_css_hook_with_text_and_html_parts.deliver
-    assert_match '<div id="test" style="color: #123456;">Test</div>', mail.html_part.body.encoded
+    assert_match '<div id="test" style="color: #123456;">Test</div>', mail.html_part.decoded
     # Test specified text part
-    assert_match 'Different Text Part', mail.text_part.body.encoded
+    assert_match 'Different Text Part', mail.text_part.decoded
   end
 
   def test_inline_css_hook_with_utf_8_characters
     mail = HelperMailer.use_inline_css_hook_with_utf_8.deliver
-    assert_match 'ᚠᛇᚻ᛫ᛒᛦᚦ᛫ᚠᚱᚩᚠᚢᚱ᛫ᚠᛁᚱᚪ᛫ᚷᛖᚻᚹᛦᛚᚳᚢᛗ', mail.html_part.body.encoded
-    assert_match 'ᚠᛇᚻ᛫ᛒᛦᚦ᛫ᚠᚱᚩᚠᚢᚱ᛫ᚠᛁᚱᚪ᛫ᚷᛖᚻᚹᛦᛚᚳᚢᛗ', mail.text_part.body.encoded
+
+    html, text = mail.html_part.body.decoded, mail.text_part.body.decoded
+    if RUBY_VERSION =~ /1.9/
+      # In Ruby 1.9, Mail does not set encoding to UTF-8 when decoding the Base64 string.
+      # This is an internal issue, and not a problem for email clients.
+      html, text = html.force_encoding('UTF-8'), text.force_encoding('UTF-8')
+    end
+
+    [html, text].each do |part|
+      assert_match 'ᚠᛇᚻ᛫ᛒᛦᚦ᛫ᚠᚱᚩᚠᚢᚱ᛫ᚠᛁᚱᚪ᛫ᚷᛖᚻᚹᛦᛚᚳᚢᛗ', part
+    end
   end
 end
 

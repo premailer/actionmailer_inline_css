@@ -6,8 +6,7 @@ Premailer::Adapter::Nokogiri.module_eval do
   def load_html(html)
     # Force UTF-8 encoding
     if RUBY_VERSION =~ /1.9/
-      html = html.force_encoding('UTF-8').encode!
-      doc = ::Nokogiri::HTML(html) {|c| c.recover }
+      doc = ::Nokogiri::HTML(html.encode('UTF-8')) {|c| c.recover }
     else
       doc = ::Nokogiri::HTML(html, nil, 'UTF-8') {|c| c.recover }
     end

@@ -42,8 +42,12 @@ To use this in your Rails app, simply add `gem "actionmailer_inline_css"` to you
 
 #### NOTE:
 
-The current version of premailer doesn't support UTF-8, so I have written a small
-workaround to enforce it. This works for both Ruby 1.9 and 1.8.
+The current version of premailer doesn't support UTF-8, so this gem has some built-in workarounds.
+These work for both Ruby 1.9 and 1.8.
+
+* Premailer's Nokogiri adapter has been patched to force UTF-8 encoding for the input html.
+* The email's HTML part is always encoded and sent with a transfer type of <tt>base64</tt>.
+  (The default 'quoted-printable' type escapes '=' and '?' symbols.)
 
 
 ### Including CSS in Mail Templates
