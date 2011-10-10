@@ -26,7 +26,22 @@ TEST_HTML_UTF8 = %Q{
   </body>
 </html>}
 
+TEST_HTML_WITH_HOST = %Q{
+<html>
+  <head>
+    <style>
+      #test { color: #123456; }
+    </style>
+  </head>
+  <body>
+    <img src="/images/test.png" />
+  </body>
+</html>
+}
+
 class HelperMailer < ActionMailer::Base
+  default :host => "http://www.example.com/"
+
   def use_inline_css_hook_with_only_html_part
     mail_with_defaults do |format|
       format.html { render(:inline => TEST_HTML) }
@@ -43,6 +58,12 @@ class HelperMailer < ActionMailer::Base
   def use_inline_css_hook_with_utf_8
     mail_with_defaults do |format|
       format.html { render(:inline => TEST_HTML_UTF8) }
+    end
+  end
+
+  def inline_css_hook_with_base_url
+    mail_with_defaults do |format|
+      format.html { render(:inline => TEST_HTML_WITH_HOST) }
     end
   end
 
@@ -74,6 +95,12 @@ class InlineCssHookTest < ActionMailer::TestCase
     mail = HelperMailer.use_inline_css_hook_with_utf_8.deliver
     assert_match 'ᚠᛇᚻ᛫ᛒᛦᚦ᛫ᚠᚱᚩᚠᚢᚱ᛫ᚠᛁᚱᚪ᛫ᚷᛖᚻᚹᛦᛚᚳᚢᛗ', mail.html_part.body.encoded
     assert_match 'ᚠᛇᚻ᛫ᛒᛦᚦ᛫ᚠᚱᚩᚠᚢᚱ᛫ᚠᛁᚱᚪ᛫ᚷᛖᚻᚹᛦᛚᚳᚢᛗ', mail.text_part.body.encoded
+  end
+
+  def test_inline_css_hook_with_base_url
+    mail = HelperMailer.inline_css_hook_with_base_url.deliver
+    assert_match '<img src="http://www.example.com/images/test.png">',
+      mail.html_part.body.encoded
   end
 end
 
