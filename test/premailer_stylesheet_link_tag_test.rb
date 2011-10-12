@@ -3,6 +3,8 @@ require 'abstract_unit'
 ENV["RAILS_ASSET_ID"] = "123456"
 
 class HelperMailer < ActionMailer::Base
+  default :host => "http://www.example.com/"
+
   def use_stylesheet_link_tag
     mail_with_defaults do |format|
       format.html { render(:inline => %Q{

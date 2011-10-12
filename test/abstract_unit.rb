@@ -37,6 +37,7 @@ require 'mocha'
 
 require 'action_mailer'
 require 'action_mailer/test_case'
+require 'webmock/test_unit'
 require 'actionmailer_inline_css'
 
 silence_warnings do
