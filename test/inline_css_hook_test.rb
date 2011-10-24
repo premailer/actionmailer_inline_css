@@ -57,6 +57,7 @@ class HelperMailer < ActionMailer::Base
 
   def use_inline_css_hook_with_utf_8
     mail_with_defaults do |format|
+      charset "utf8"
       format.html { render(:inline => TEST_HTML_UTF8) }
     end
   end
@@ -67,12 +68,20 @@ class HelperMailer < ActionMailer::Base
     end
   end
 
+  def with_attachment
+    mail_with_defaults do |format|
+      attachments["hello"] = File.read('test')
+      format.html { render(:inline => TEST_HTML) }
+    end
+  end
+
   protected
 
   def mail_with_defaults(&block)
     mail(:to => "test@localhost", :from => "tester@example.com",
           :subject => "using helpers", &block)
   end
+
 end
 
 
@@ -92,7 +101,10 @@ class InlineCssHookTest < ActionMailer::TestCase
   end
 
   def test_inline_css_hook_with_utf_8_characters
-    mail = HelperMailer.use_inline_css_hook_with_utf_8.deliver
+    mail = nil
+    Kernel.silence_warnings do
+      mail = HelperMailer.use_inline_css_hook_with_utf_8.deliver
+    end
     assert_match 'ᚠᛇᚻ᛫ᛒᛦᚦ᛫ᚠᚱᚩᚠᚢᚱ᛫ᚠᛁᚱᚪ᛫ᚷᛖᚻᚹᛦᛚᚳᚢᛗ', mail.html_part.body.encoded
     assert_match 'ᚠᛇᚻ᛫ᛒᛦᚦ᛫ᚠᚱᚩᚠᚢᚱ᛫ᚠᛁᚱᚪ᛫ᚷᛖᚻᚹᛦᛚᚳᚢᛗ', mail.text_part.body.encoded
   end
@@ -102,5 +114,15 @@ class InlineCssHookTest < ActionMailer::TestCase
     assert_match '<img src="http://www.example.com/images/test.png">',
       mail.html_part.body.encoded
   end
-end
 
+  def test_preservation_of_attachments
+    File.stubs(:read).returns("world")
+    mail = HelperMailer.with_attachment
+    assert mail.attachments["hello"].is_a?(Mail::Part)
+    original_hello_attachment_url = mail.attachments["hello"].url
+    m = ActionMailer::InlineCssHook.delivering_email(mail.deliver)
+    assert m.attachments["hello"].is_a?(Mail::Part)
+    assert_equal original_hello_attachment_url, mail.attachments["hello"].url
+  end
+
+end
