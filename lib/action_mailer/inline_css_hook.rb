@@ -16,19 +16,21 @@ module ActionMailer
                                       :base_url => message.header[:host].to_s)
         existing_text_part = message.text_part && message.text_part.body.to_s
         existing_attachments = message.attachments
+        msg_charset = message.charset
 
         # Reset the body
         message.body = nil
+        message.body.instance_variable_set("@parts", Mail::PartsList.new)
 
         # Add an HTML part with CSS inlined.
         message.html_part do
-          content_type "text/html; charset=utf-8"
+          content_type "text/plain; charset=#{charset}"
           body premailer.to_inline_css
         end
 
         # Add a text part with either the pre-existing text part, or one generated with premailer.
         message.text_part do
-          content_type "text/plain; charset=utf-8"
+          content_type "text/plain; charset=#{charset}"
           body existing_text_part || premailer.to_plain_text
         end
 

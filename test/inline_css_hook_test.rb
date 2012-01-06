@@ -98,15 +98,20 @@ class InlineCssHookTest < ActionMailer::TestCase
     mail = HelperMailer.use_inline_css_hook_with_text_and_html_parts.deliver
     assert_match '<div id="test" style="color: #123456;">Test</div>', mail.html_part.body.encoded
     # Test specified text part
-    assert_match 'Different Text Part', mail.text_part.body.encoded
+    assert_match 'Different Text Part', mail.text_part.decoded
   end
 
   def test_inline_css_hook_with_utf_8_characters
     mail = nil
     mail = HelperMailer.use_inline_css_hook_with_utf_8.deliver
-    assert_match 'ᚠᛇᚻ᛫ᛒᛦᚦ᛫ᚠᚱᚩᚠᚢᚱ', mail.html_part.body.encoded
-    assert_match 'Gonçalves', mail.html_part.body.encoded
-    assert_match 'ᚠᛇᚻ᛫ᛒᛦᚦ᛫ᚠᚱᚩᚠᚢᚱ', mail.text_part.body.encoded
+
+    assert_match 'ᚠᛇᚻ᛫ᛒᛦᚦ᛫ᚠᚱᚩᚠᚢᚱ', mail.html_part.decoded
+    assert_match 'Gonçalves',      mail.html_part.decoded
+    assert_match 'ᚠᛇᚻ᛫ᛒᛦᚦ᛫ᚠᚱᚩᚠᚢᚱ', mail.text_part.decoded
+    assert_match '=E1=9A=A0=E1=9B=87=E1=9A=BB=', mail.html_part.encoded
+
+    assert_equal mail.html_part.content_transfer_encoding, "quoted-printable"
+    assert_equal mail.text_part.content_transfer_encoding, "base64"
   end
 
   def test_inline_css_hook_with_base_url
