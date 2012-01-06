@@ -102,9 +102,7 @@ class InlineCssHookTest < ActionMailer::TestCase
 
   def test_inline_css_hook_with_utf_8_characters
     mail = nil
-    Kernel.silence_warnings do
-      mail = HelperMailer.use_inline_css_hook_with_utf_8.deliver
-    end
+    mail = HelperMailer.use_inline_css_hook_with_utf_8.deliver
     assert_match 'ᚠᛇᚻ᛫ᛒᛦᚦ᛫ᚠᚱᚩᚠᚢᚱ᛫ᚠᛁᚱᚪ᛫ᚷᛖᚻᚹᛦᛚᚳᚢᛗ', mail.html_part.body.encoded
     assert_match 'ᚠᛇᚻ᛫ᛒᛦᚦ᛫ᚠᚱᚩᚠᚢᚱ᛫ᚠᛁᚱᚪ᛫ᚷᛖᚻᚹᛦᛚᚳᚢᛗ', mail.text_part.body.encoded
   end
