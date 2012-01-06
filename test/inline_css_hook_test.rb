@@ -22,7 +22,8 @@ TEST_HTML_UTF8 = %Q{
     </style>
   </head>
   <body>
-    <div id="test">ᚠᛇᚻ᛫ᛒᛦᚦ᛫ᚠᚱᚩᚠᚢᚱ᛫ᚠᛁᚱᚪ᛫ᚷᛖᚻᚹᛦᛚᚳᚢᛗ</div>
+    <div id="test">ᚠᛇᚻ᛫ᛒᛦᚦ᛫ᚠᚱᚩᚠᚢᚱ</div>
+    <div id="author">Gonçalves</div>
   </body>
 </html>}
 
@@ -103,8 +104,9 @@ class InlineCssHookTest < ActionMailer::TestCase
   def test_inline_css_hook_with_utf_8_characters
     mail = nil
     mail = HelperMailer.use_inline_css_hook_with_utf_8.deliver
-    assert_match 'ᚠᛇᚻ᛫ᛒᛦᚦ᛫ᚠᚱᚩᚠᚢᚱ᛫ᚠᛁᚱᚪ᛫ᚷᛖᚻᚹᛦᛚᚳᚢᛗ', mail.html_part.body.encoded
-    assert_match 'ᚠᛇᚻ᛫ᛒᛦᚦ᛫ᚠᚱᚩᚠᚢᚱ᛫ᚠᛁᚱᚪ᛫ᚷᛖᚻᚹᛦᛚᚳᚢᛗ', mail.text_part.body.encoded
+    assert_match 'ᚠᛇᚻ᛫ᛒᛦᚦ᛫ᚠᚱᚩᚠᚢᚱ', mail.html_part.body.encoded
+    assert_match 'Gonçalves', mail.html_part.body.encoded
+    assert_match 'ᚠᛇᚻ᛫ᛒᛦᚦ᛫ᚠᚱᚩᚠᚢᚱ', mail.text_part.body.encoded
   end
 
   def test_inline_css_hook_with_base_url
