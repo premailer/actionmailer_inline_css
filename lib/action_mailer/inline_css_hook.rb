@@ -24,7 +24,7 @@ module ActionMailer
 
         # Add an HTML part with CSS inlined.
         message.html_part do
-          content_type "text/plain; charset=#{charset}"
+          content_type "text/html; charset=#{charset}"
           body premailer.to_inline_css
         end
 
