@@ -4,25 +4,37 @@
 module ActionMailer
   class InlineCssHook
     def self.delivering_email(message)
+
       if html_part = (message.html_part || (message.content_type =~ /text\/html/ && message))
         host = ActionMailerInlineCss.base_url || message.header[:host].to_s
 
-        # Generate an email with all CSS inlined (access CSS a FS path)
-        premailer = ::Premailer.new(html_part.body.to_s, :with_html_string => true)
-        # Prepend host to remaning URIs.
-        # Two-phase conversion to avoid request deadlock from dev. server (Issue #4)
-        premailer = ::Premailer.new(premailer.to_inline_css, :with_html_string => true, :base_url => host)
+        # Generate an email with all CSS inlined (access CSS a FS path), and URIs
+        premailer = ::Premailer.new(html_part.body.to_s, :with_html_string => true, :base_url => host)
 
-        existing_text_part = message.text_part && message.text_part.body.to_s
         msg_charset = message.charset
 
-        html_part.body = premailer.to_inline_css
+        if message.text_part && message.text_part.body.to_s
+          html_part.content_type "text/html; charset=#{msg_charset}"
+          html_part.body premailer.to_inline_css
+        else
+          existing_attachments = message.attachments
 
-        unless existing_text_part
-          message.text_part do
+          # Clear body to make a multipart email
+          message.body = nil
+
+          # IMPORTANT: Plain text part must be generated before CSS is inlined.
+          # Not doing so results in CSS declarations (<style>) visible in the plain text part.
+          message.text_part = Mail::Part.new do
             content_type "text/plain; charset=#{msg_charset}"
-            body existing_text_part || premailer.to_plain_text
+            body premailer.to_plain_text
           end
+
+          message.html_part = Mail::Part.new do
+            content_type "text/html; charset=#{msg_charset}"
+            body premailer.to_inline_css
+          end
+
+          existing_attachments.each {|a| message.body << a }
         end
 
         message

@@ -58,8 +58,7 @@ class HelperMailer < ActionMailer::Base
 
   def use_inline_css_hook_with_utf_8
     mail_with_defaults do |format|
-      charset "utf8"
-      format.html { render(:inline => TEST_HTML_UTF8) }
+      format.html(:charset => "utf8") { render(:inline => TEST_HTML_UTF8) }
     end
   end
 
