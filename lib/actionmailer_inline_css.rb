@@ -6,3 +6,7 @@ require 'overrides/premailer/adapter/nokogiri'
 
 ActionMailer::Base.register_interceptor ActionMailer::InlineCssHook
 
+module ActionMailerInlineCss
+  mattr_accessor :base_url
+end
+
