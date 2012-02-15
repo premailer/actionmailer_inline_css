@@ -12,7 +12,7 @@ Premailer.class_eval do
     if File.exist?(rails_path)
       load_css_from_string(File.read(rails_path))
     elsif (asset = Rails.application.assets.find_asset(clean_path.sub("#{Rails.configuration.assets.prefix}/", '')))
-      load_css_from_string(asset.body)
+      load_css_from_string(asset.to_s)
     else
       load_css_from_local_file_without_rails_path!(path)
     end
