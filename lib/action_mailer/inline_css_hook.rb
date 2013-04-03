@@ -34,6 +34,8 @@ module ActionMailer
             body premailer.to_inline_css
           end
 
+          message.content_type 'multipart/mixed' if ! existing_attachments.empty?
+
           existing_attachments.each {|a| message.body << a }
         end
 
