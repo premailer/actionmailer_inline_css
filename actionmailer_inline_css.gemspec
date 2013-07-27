@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   s.executables      = `git ls-files -- bin/*`.split("\n").map { |f| File.basename(f) }
   s.require_paths = ["lib"]
   s.add_dependency('actionmailer', '>= 3.0.0')
-  s.add_dependency('premailer',    '>= 1.7.1')
+  s.add_dependency('regru-premailer',    '>= 1.7.1')
   s.add_dependency('nokogiri',     '>= 1.4.4')
   s.add_development_dependency('mocha', '>= 0.10.0')
 end
