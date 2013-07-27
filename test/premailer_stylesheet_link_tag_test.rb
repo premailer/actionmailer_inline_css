@@ -35,7 +35,7 @@ class PremailerStylesheetLinkTagTest < ActionMailer::TestCase
     File.stubs(:read).returns("div.test { color: #119911; }")
 
     mail = HelperMailer.use_stylesheet_link_tag.deliver
-    assert_match %Q{<div class="test" style="color: #119911;">}, mail.html_part.body.encoded
+    assert_match %Q{<div class="test" style="color: #119911">}, mail.html_part.body.encoded
   end
 end
 
