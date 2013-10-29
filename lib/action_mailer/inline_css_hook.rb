@@ -22,17 +22,26 @@ module ActionMailer
           # Clear body to make a multipart email
           message.body = nil
 
-          # IMPORTANT: Plain text part must be generated before CSS is inlined.
-          # Not doing so results in CSS declarations (<style>) visible in the plain text part.
-          message.text_part = Mail::Part.new do
+          # Important: Plain text part must be generated before the CSS is
+          # inlined. Not doing so results in CSS declarations being visible
+          # in the plain text part.
+          text_alternative = Mail::Part.new do
             content_type "text/plain; charset=#{msg_charset}"
             body premailer.to_plain_text
           end
 
-          message.html_part = Mail::Part.new do
+          html_alternative = Mail::Part.new do
             content_type "text/html; charset=#{msg_charset}"
             body premailer.to_inline_css
           end
+
+          html_container        = Mail::Part.new { content_type "multipart/related" }
+          alternative_container = Mail::Part.new { content_type "multipart/alternative" }
+
+          alternative_container.add_part text_alternative
+          alternative_container.add_part html_alternative
+
+          message.add_part alternative_container
 
           # Change the content type to `multipart/mixed` while preserving
           # additional parameters such as `boundary`, `charset`, etc. if there
