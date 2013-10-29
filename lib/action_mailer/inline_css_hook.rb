@@ -34,7 +34,14 @@ module ActionMailer
             body premailer.to_inline_css
           end
 
-          message.content_type 'multipart/mixed' if ! existing_attachments.empty?
+          # Change the content type to `multipart/mixed` while preserving
+          # additional parameters such as `boundary`, `charset`, etc. if there
+          # are any email attachments.
+          unless existing_attachments.empty?
+            content_type    = message.content_type.split(";")
+            content_type[0] = "multipart/mixed"
+            message.content_type content_type.join(";")
+          end
 
           existing_attachments.each {|a| message.body << a }
         end
