@@ -94,7 +94,9 @@ module ActionMailer
       alternative_part.add_part text_part
       alternative_part.add_part html_part
 
-      if @attachments.empty?
+      # Nesting `multipart/alternative` inside of `multipart/related` is only
+      # necessary if there are any inline attachments.
+      if !@attachments.any? { |a| a.inline? }
         alternative_part
       else
         # Nest part with content type `multipart/alternative` inside of a part
