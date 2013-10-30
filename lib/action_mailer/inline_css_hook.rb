@@ -35,24 +35,12 @@ module ActionMailer
           @message.add_part nest_header_parts(build_text_part(premailer), build_html_part(premailer))
         end
 
-        add_attachments unless @attachments.empty?
-        @message
+        set_content_type
+        @attachments.each { |a| @message.body << a }
       end
     end
 
     private
-
-    # Change the content type to `multipart/mixed` while preserving aditional
-    # parameters such as `boundary`, `charset`, etc.
-    #
-    # @return [void]
-    def add_attachments
-      content_type    = @message.content_type.split(";")
-      content_type[0] = "multipart/mixed"
-      @message.content_type content_type.join(";")
-
-      @attachments.each { |a| @message.body << a }
-    end
 
     # @param premailer [Premailer]
     #
@@ -90,6 +78,11 @@ module ActionMailer
     #       image/jpeg (example) (inline attachments)
     #     aplication/pdf (example) (normal attachments)
     #
+    # If the email has attachments then return a `multipart/related` part. If
+    # the email does not have attachments then return a `multipart/alternative`
+    # part. The top level of the hierarchy will get set later in
+    # InlineCssHook#set_content_type.
+    #
     # @param text_part [Mail::Part]
     # @param html_part [Mail::Part]
     #
@@ -101,12 +94,28 @@ module ActionMailer
       alternative_part.add_part text_part
       alternative_part.add_part html_part
 
-      # Nest part with content type `multipart/alternative` inside of a part
-      # with content type `multipart/related`.
-      related_part = Mail::Part.new { content_type "multipart/related" }
-      related_part.add_part alternative_part
+      if @attachments.empty?
+        alternative_part
+      else
+        # Nest part with content type `multipart/alternative` inside of a part
+        # with content type `multipart/related`.
+        related_part = Mail::Part.new { content_type "multipart/related" }
+        related_part.add_part alternative_part
 
-      related_part
+        related_part
+      end
+    end
+
+    # Set the appropriate content type of the message depending on if there are
+    # any email attachments.
+    def set_content_type
+      content_type = @message.content_type.split(";")
+      content_type[0] = if @attachments.empty?
+        "multipart/related"
+      else
+        "multipart/mixed"
+      end
+      @message.content_type content_type.join(";")
     end
   end
 end
