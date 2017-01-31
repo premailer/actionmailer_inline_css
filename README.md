@@ -1,4 +1,4 @@
-# ActionMailer Inline CSS [![TravisCI](http://travis-ci.org/ndbroadbent/actionmailer_inline_css.png?branch=master)](http://travis-ci.org/ndbroadbent/actionmailer_inline_css)
+# ActionMailer Inline CSS [![TravisCI](http://travis-ci.org/premailer/actionmailer_inline_css.png?branch=master)](http://travis-ci.org/premailer/actionmailer_inline_css)
 
 Seamlessly integrate [Alex Dunae's premailer](http://premailer.dialect.ca/) gem with ActionMailer.
 
