@@ -88,14 +88,14 @@ end
 class InlineCssHookTest < ActionMailer::TestCase
   def test_inline_css_hook_with_only_html_part
     mail = HelperMailer.use_inline_css_hook_with_only_html_part.deliver
-    assert_match '<div id="test" style="color: #123456;">Test</div>', mail.html_part.body.encoded
+    assert_match '<div id="test" style="color: #123456">Test</div>', mail.html_part.body.encoded
     # Test generated text part
     assert_match 'Test', mail.text_part.body.encoded
   end
 
   def test_inline_css_hook_with_text_and_html_parts
     mail = HelperMailer.use_inline_css_hook_with_text_and_html_parts.deliver
-    assert_match '<div id="test" style="color: #123456;">Test</div>', mail.html_part.body.encoded
+    assert_match '<div id="test" style="color: #123456">Test</div>', mail.html_part.body.encoded
     # Test specified text part
     assert_match 'Different Text Part', mail.text_part.decoded
   end
