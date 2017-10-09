@@ -131,13 +131,13 @@ class InlineCssHookTest < ActionMailer::TestCase
 
   def test_alternative_content_type
     mail = HelperMailer.use_inline_css_hook_with_text_and_html_parts.deliver
-    assert_match /multipart\/alternative/, mail.content_type
+    assert_match( /multipart\/alternative/, mail.content_type )
   end
 
   def test_mixed_content_type
     File.stubs(:read).returns("world")
     mail = HelperMailer.with_attachment
     m = ActionMailer::InlineCssHook.delivering_email(mail.deliver)
-    assert_equal "multipart/mixed", m.content_type
+    assert_equal( "multipart/mixed", m.content_type )
   end
 end
